@@ -91,7 +91,7 @@ const games = [
   {name:"Strike Force Heroes",type:"Flash",icon:"💥",swf:"strike-force-heroes-1.swf"},
   {name:"Strike Force Heroes 2",type:"Flash",icon:"🔥",swf:"strike-force-heroes-2.swf"},
   {name:"Strike Force Heroes 3",type:"Flash",icon:"💥",swf:"strike-force-heroes-3.swf"},
-  {name:"There is no game",type:"HTML",icon:"💥",url:"https://raw.githubusercontent.com/CerPro-official/downloads/refs/heads/main/There-is-no-game.html"},
+  {name:"There is no game",type:"HTML",icon:"💥",file:"There-is-no-game.html"},
   {name:"Need for Speed Most Wanted (2005)[.zip for windows]",type:"PC",icon:"🚗",url:"#"},
   {name:"FIFA_09.rar",type:"PC",icon:"⚽",url:"#"},
   {name:"NES_games.zip",type:"PC",icon:"💽",url:"https://drive.google.com/file/d/1671Ws5CryHQomPNewtYp_oczbbgkJWVN/view?usp=sharing"},
@@ -114,8 +114,9 @@ if(g.type==="Flash"){
     action=`<a class="btn" href="#" onclick="play('${g.name.replace(/'/g,"\\'")}','${g.swf}');return false;">Play</a>`;
 }
 else if(g.type==="HTML"){
-    action=`<a class="btn" href="#" onclick="playHTML('${g.name.replace(/'/g,"\\'")}','${g.url}');return false;">Play</a>`;
+    action=`<a class="btn" href="#" onclick="playHTML('${g.name.replace(/'/g,"\\'")}','${g.file}');return false;">Play</a>`;
 }
+
 else{
     action=`<a class="btn" href="${g.url}" target="_blank" rel="noopener noreferrer">Download</a>`;
 }
@@ -164,6 +165,24 @@ function playHTML(n,url){
     </iframe>
   `;
 }
+
+  function playHTML(name,file){
+    const overlay=document.getElementById("overlay");
+    const title=document.getElementById("t");
+    const game=document.getElementById("game");
+
+    overlay.classList.add("active");
+    title.textContent=name;
+
+    game.innerHTML=`
+        <iframe
+            src="${file}"
+            style="width:100%;height:100%;border:none;"
+            allowfullscreen>
+        </iframe>
+    `;
+}
+  
 function closeGame(){
   document.getElementById("overlay").classList.remove("active");
   document.getElementById("game").innerHTML = "";
