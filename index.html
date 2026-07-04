@@ -25,7 +25,8 @@ nav a{color:#cbd5e1;text-decoration:none;margin:0 12px}
 .btn,.toolBtn{display:inline-block;background:#2563eb;color:#fff;text-decoration:none;padding:12px 20px;border:none;border-radius:12px;margin:5px;cursor:pointer;transition:.2s}
 .btn:hover,.toolBtn:hover{transform:translateY(-2px);background:#1d4ed8}
 .search{margin:30px 6%; display:flex; gap:12px; flex-wrap:wrap;}
-.search input{flex:1; min-width:250px; padding:15px; border-radius:12px; border:none; outline:none;}
+.search input{flex:1; min-width:250px; padding:15px; border-radius:12px; border:none; outline:none; background: #ffffff10; color: #fff;}
+.search input::placeholder{color: #94a3b8;}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;padding:0 6% 60px}
 .card{background:#ffffff10;border:1px solid #ffffff18;border-radius:22px;padding:20px;transition:.25s}
 .card:hover{transform:translateY(-6px)}
@@ -70,7 +71,7 @@ nav a{color:#cbd5e1;text-decoration:none;margin:0 12px}
 
 <div class="search">
   <input id="s" placeholder="Search games..." oninput="render()">
-  <input id="customUrl" placeholder="Paste SWF or HTML game URL here...">
+  <input id="customUrl" placeholder="Paste a .swf or game link here...">
   <button class="btn" style="margin:0;" onclick="playCustomUrl()">Run from URL</button>
 </div>
 
@@ -93,8 +94,8 @@ const games = [
   {name:"Strike Force Heroes",type:"Flash",icon:"💥",swf:"strike-force-heroes-1.swf"},
   {name:"Strike Force Heroes 2",type:"Flash",icon:"🔥",swf:"strike-force-heroes-2.swf"},
   {name:"Strike Force Heroes 3",type:"Flash",icon:"💥",swf:"strike-force-heroes-3.swf"},
-  // Upgraded: "There is no game" now uses type:"URL" and HTTPS to prevent mixed content blocking
-  {name:"There is no game",type:"URL",icon:"🚫",url:"https://uploads.ungrounded.net/alternate/871000/871934_alternate_22758_r36.zip/"},
+  // FIXED: Changed to an embed-friendly URL. The Ungrounded URL blocks iframes!
+  {name:"There is no game",type:"URL",icon:"🚫",url:"https://www.crazygames.com/embed/there-is-no-game"},
   {name:"Need for Speed Most Wanted (2005)[.zip for windows]",type:"PC",icon:"🚗",url:"#"},
   {name:"FIFA_09.rar",type:"PC",icon:"⚽",url:"#"},
   {name:"NES_games.zip",type:"PC",icon:"💽",url:"https://drive.google.com/file/d/1671Ws5CryHQomPNewtYp_oczbbgkJWVN/view?usp=sharing"},
@@ -116,7 +117,6 @@ function render(){
      if(g.type==="Flash"){
        action=`<a class="btn" href="#" onclick="play('${g.name.replace(/'/g,"\\'")}','${g.swf}');return false;">Play</a>`;
      }
-     // Added check for both HTML and URL types to open in iframe
      else if(g.type==="HTML" || g.type==="URL"){
        action=`<a class="btn" href="#" onclick="playHTML('${g.name.replace(/'/g,"\\'")}','${g.url}');return false;">Play</a>`;
      }
@@ -137,15 +137,18 @@ function render(){
 
 render();
 
-// Function to handle arbitrary URLs from the input field
 function playCustomUrl() {
-  const url = document.getElementById("customUrl").value.trim();
+  let url = document.getElementById("customUrl").value.trim();
   if (!url) {
     alert("Please enter a valid URL first.");
     return;
   }
   
-  // Checks if the user pasted a Flash link or a standard web link
+  // FIX: Make sure the URL has http:// or https:// so the browser doesn't break
+  if (!/^https?:\/\//i.test(url)) {
+      url = "https://" + url;
+  }
+  
   if (url.toLowerCase().endsWith(".swf")) {
     play("Custom Flash Game", url);
   } else {
@@ -177,11 +180,13 @@ function playHTML(n,url){
   overlay.classList.add("active");
   title.textContent = n;
 
+  // FIX: Added 'allow-same-origin' and 'allow-scripts' sandbox attributes which some games need
   game.innerHTML = `
     <iframe
       src="${url}"
       style="width:100%;height:100%;border:none;background:#000;"
-      allow="fullscreen; autoplay; gamepad"
+      allow="fullscreen; autoplay; gamepad; microphone; camera"
+      sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
       allowfullscreen>
     </iframe>
   `;
@@ -190,8 +195,6 @@ function playHTML(n,url){
 function closeGame(){
   document.getElementById("overlay").classList.remove("active");
   document.getElementById("game").innerHTML = "";
-  // Optional: clear the custom URL input when closing
-  document.getElementById("customUrl").value = "";
 }
 
 function toggleFullscreen(){
