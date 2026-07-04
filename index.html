@@ -114,7 +114,8 @@ if(g.type==="Flash"){
     action=`<a class="btn" href="#" onclick="play('${g.name.replace(/'/g,"\\'")}','${g.swf}');return false;">Play</a>`;
 }
 else if(g.type==="HTML"){
-    action=`<a class="btn" href="#" onclick="playHTML('${g.name.replace(/'/g,"\\'")}','${g.file}');return false;">Play</a>`;
+    // Upgraded: Replaced g.file with g.url to properly target the game link in the array
+    action=`<a class="btn" href="#" onclick="playHTML('${g.name.replace(/'/g,"\\'")}','${g.url}');return false;">Play</a>`;
 }
 
 else{
@@ -148,6 +149,8 @@ function play(n,f){
   game.appendChild(p);
   p.load({url:f});
 }
+
+// Upgraded: Consolidated the two playHTML functions into this single working function
 function playHTML(n,url){
   const overlay = document.getElementById("overlay");
   const title = document.getElementById("t");
@@ -166,23 +169,6 @@ function playHTML(n,url){
   `;
 }
 
-  function playHTML(name,file){
-    const overlay=document.getElementById("overlay");
-    const title=document.getElementById("t");
-    const game=document.getElementById("game");
-
-    overlay.classList.add("active");
-    title.textContent=name;
-
-    game.innerHTML=`
-        <iframe
-            src="${file}"
-            style="width:100%;height:100%;border:none;"
-            allowfullscreen>
-        </iframe>
-    `;
-}
-  
 function closeGame(){
   document.getElementById("overlay").classList.remove("active");
   document.getElementById("game").innerHTML = "";
