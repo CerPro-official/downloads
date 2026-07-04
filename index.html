@@ -2,56 +2,76 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Game Vault</title>
-  <link rel="icon" href="logo.png">
+<link rel="icon" href="logo.png">
 <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
-body{background:#070b16;color:#fff;overflow-x:hidden}
-body:before{content:"";position:fixed;inset:-20%;background:
-radial-gradient(circle at 20% 20%,#2a5cff55,transparent 30%),
-radial-gradient(circle at 80% 30%,#8b5cf655,transparent 25%),
-radial-gradient(circle at 50% 80%,#00d4ff33,transparent 30%);
-filter:blur(40px);animation:f 18s linear infinite;z-index:-1}
-@keyframes f{50%{transform:translateY(-30px) scale(1.1)}}
-header{padding:60px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
-.logo{font-size:2.4rem;font-weight:700}
-nav a{color:#cbd5e1;text-decoration:none;margin:0 12px}
-.hero{margin:0 6%;padding:50px;border-radius:28px;background:linear-gradient(135deg,#2563eb55,#7c3aed55);backdrop-filter:blur(18px)}
-.hero h1{font-size:3rem}
-.hero p{max-width:650px;color:#d8e2ef;margin:15px 0 25px}
-.btn,.toolBtn{display:inline-block;background:#2563eb;color:#fff;text-decoration:none;padding:12px 20px;border:none;border-radius:12px;margin:5px;cursor:pointer;transition:.2s}
-.btn:hover,.toolBtn:hover{transform:translateY(-2px);background:#1d4ed8}
-.search{margin:30px 6%; display:flex; gap:12px; flex-wrap:wrap;}
-.search input{flex:1; min-width:250px; padding:15px; border-radius:12px; border:none; outline:none; background: #ffffff10; color: #fff;}
-.search input::placeholder{color: #94a3b8;}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;padding:0 6% 60px}
-.card{background:#ffffff10;border:1px solid #ffffff18;border-radius:22px;padding:20px;transition:.25s}
-.card:hover{transform:translateY(-6px)}
-.badge{display:inline-block;background:#2563eb;padding:4px 10px;border-radius:999px;font-size:.8rem;margin:8px 0}
-.cover{height:150px;border-radius:16px;background:linear-gradient(135deg,#1e3a8a,#312e81);display:flex;align-items:center;justify-content:center;font-size:3rem}
-.card h3{margin:6px 0 8px;line-height:1.2}
-#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:9999;flex-direction:column;align-items:center;justify-content:center;padding:18px;overflow:auto}
-#overlay.active{display:flex}
-#toolbar{width:min(96vw,960px);display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
-#toolbar h2{font-size:1.2rem}
-#toolbar > div{display:flex;gap:8px;flex-wrap:wrap}
-#game{width:min(96vw,960px);aspect-ratio:4/3;max-height:82vh;background:#000;border-radius:16px;overflow:hidden}
-#game ruffle-player, #game iframe, #game object, #game embed{width:100%;height:100%}
-@media (max-width:700px){
-  header{padding:28px 5%}
-  .hero{margin:0 5%;padding:28px}
-  .hero h1{font-size:2rem}
-  nav{width:100%}
-  nav a{margin:0 10px 8px 0;display:inline-block}
-  .grid{padding:0 5% 50px}
-  #toolbar{width:min(96vw,960px)}
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+  body { background: #070b16; color: #fff; overflow-x: hidden; }
+  
+  /* Animated Background */
+  body:before {
+    content: ""; position: fixed; inset: -20%;
+    background: radial-gradient(circle at 20% 20%, #2a5cff55, transparent 30%),
+                radial-gradient(circle at 80% 30%, #8b5cf655, transparent 25%),
+                radial-gradient(circle at 50% 80%, #00d4ff33, transparent 30%);
+    filter: blur(40px); animation: float 18s linear infinite; z-index: -1;
+  }
+  @keyframes float { 50% { transform: translateY(-30px) scale(1.1); } }
+
+  /* Header & Navigation */
+  header { padding: 40px 6%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  .logo { font-size: 2.2rem; font-weight: 700; }
+  nav a { color: #cbd5e1; text-decoration: none; margin: 0 12px; transition: color 0.2s; }
+  nav a:hover { color: #fff; }
+
+  /* Hero Section */
+  .hero { margin: 0 6%; padding: 50px; border-radius: 28px; background: linear-gradient(135deg, #2563eb55, #7c3aed55); backdrop-filter: blur(18px); border: 1px solid rgba(255,255,255,0.1); }
+  .hero h1 { font-size: 3rem; margin-bottom: 10px; line-height: 1.2; }
+  .hero p { max-width: 650px; color: #d8e2ef; margin-bottom: 25px; font-size: 1.1rem; }
+
+  /* Buttons */
+  .btn, .toolBtn { display: inline-block; background: #2563eb; color: #fff; text-decoration: none; padding: 12px 24px; border: none; border-radius: 12px; cursor: pointer; transition: 0.2s; font-weight: 500; }
+  .btn:hover, .toolBtn:hover { transform: translateY(-2px); background: #1d4ed8; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4); }
+
+  /* Search & Custom URL Bar */
+  .search-container { margin: 40px 6%; display: flex; gap: 12px; flex-wrap: wrap; }
+  .search-container input { flex: 1; min-width: 250px; padding: 16px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); outline: none; background: rgba(255,255,255,0.05); color: #fff; font-size: 1rem; transition: 0.2s; }
+  .search-container input:focus { border-color: #2563eb; background: rgba(255,255,255,0.1); }
+  .search-container input::placeholder { color: #94a3b8; }
+
+  /* Game Grid */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; padding: 0 6% 60px; }
+  .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; padding: 20px; transition: 0.3s; display: flex; flex-direction: column; }
+  .card:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.06); }
+  .cover { height: 160px; border-radius: 16px; background: linear-gradient(135deg, #1e3a8a, #312e81); display: flex; align-items: center; justify-content: center; font-size: 4rem; margin-bottom: 15px; }
+  .badge { align-self: flex-start; background: #3b82f6; color: white; padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 500; margin-bottom: 12px; }
+  .card h3 { font-size: 1.2rem; margin-bottom: 15px; flex-grow: 1; }
+
+  /* Game Overlay Player */
+  #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+  #overlay.active { display: flex; }
+  #toolbar { width: 100%; max-width: 1000px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 10px; }
+  #toolbar h2 { font-size: 1.4rem; color: #fff; }
+  .toolbar-actions { display: flex; gap: 10px; }
+  #game-container { width: 100%; max-width: 1000px; aspect-ratio: 16/9; background: #000; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+  #game-container ruffle-player, #game-container iframe { width: 100%; height: 100%; border: none; }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    header { padding: 30px 5%; flex-direction: column; text-align: center; }
+    .hero { margin: 0 5%; padding: 30px; }
+    .hero h1 { font-size: 2.2rem; }
+    .search-container { flex-direction: column; margin: 30px 5%; }
+    .search-container button { width: 100%; }
+    #toolbar { flex-direction: column; text-align: center; }
+  }
 </style>
 </head>
 <body>
+
 <header>
   <div class="logo">🎮 Game Vault</div>
   <nav>
@@ -59,150 +79,160 @@ nav a{color:#cbd5e1;text-decoration:none;margin:0 12px}
     <a href="#">PC</a>
     <a href="#">Flash</a>
     <a href="#">Android</a>
-    <a href="#">Mods</a>
   </nav>
 </header>
 
 <section class="hero">
   <h1>Your Complete Game Library</h1>
-  <p>Play Flash games instantly or download PC, Android and browser games from one beautiful hub.</p>
-  <a class="btn" href="https://drive.google.com/drive/folders/1N8Biih8_7t_wluPdzZVsdNq014RpXnh-?usp=sharing" target="_blank" rel="noopener noreferrer">☁ Google Drive Collection</a>
+  <p>Play Flash games instantly or download PC, Android, and browser games from one beautiful hub.</p>
+  <a class="btn" href="https://drive.google.com/drive/folders/1N8Biih8_7t_wluPdzZVsdNq014RpXnh-?usp=sharing" target="_blank" rel="noopener noreferrer">☁️ Google Drive Collection</a>
 </section>
 
-<div class="search">
-  <input id="s" placeholder="Search games..." oninput="render()">
-  <input id="customUrl" placeholder="Paste a .swf or game link here...">
-  <button class="btn" style="margin:0;" onclick="playCustomUrl()">Run from URL</button>
+<div class="search-container">
+  <input id="searchInput" placeholder="🔍 Search library..." oninput="renderLibrary()">
+  <input id="customUrlInput" placeholder="🔗 Paste .swf or HTML game link here...">
+  <button class="btn" onclick="playCustomUrl()">Run Custom URL</button>
 </div>
 
 <div id="grid" class="grid"></div>
 
 <div id="overlay">
   <div id="toolbar">
-    <h2 id="t"></h2>
-    <div>
+    <h2 id="game-title">Loading...</h2>
+    <div class="toolbar-actions">
       <button class="toolBtn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
-      <button class="toolBtn" onclick="closeGame()">✕ Close</button>
+      <button class="toolBtn" style="background: #ef4444;" onclick="closeGame()">✕ Close</button>
     </div>
   </div>
-  <div id="game"></div>
+  <div id="game-container"></div>
 </div>
 
 <script>
+// Global Ruffle Configuration for better performance and auto-play
+window.RufflePlayer = window.RufflePlayer || {};
+window.RufflePlayer.config = {
+  autoplay: "on",
+  unmutedOverlay: "hidden",
+  backgroundColor: "#000000"
+};
+
+// Database
 const games = [
-  {name:"Super Mario 63",type:"Flash",icon:"🍄",swf:"super_mario_63.swf"},
-  {name:"Strike Force Heroes",type:"Flash",icon:"💥",swf:"strike-force-heroes-1.swf"},
-  {name:"Strike Force Heroes 2",type:"Flash",icon:"🔥",swf:"strike-force-heroes-2.swf"},
-  {name:"Strike Force Heroes 3",type:"Flash",icon:"💥",swf:"strike-force-heroes-3.swf"},
-  // FIXED: Changed to an embed-friendly URL. The Ungrounded URL blocks iframes!
-  {name:"There is no game",type:"URL",icon:"🚫",url:"https://www.crazygames.com/embed/there-is-no-game"},
-  {name:"Need for Speed Most Wanted (2005)[.zip for windows]",type:"PC",icon:"🚗",url:"#"},
-  {name:"FIFA_09.rar",type:"PC",icon:"⚽",url:"#"},
-  {name:"NES_games.zip",type:"PC",icon:"💽",url:"https://drive.google.com/file/d/1671Ws5CryHQomPNewtYp_oczbbgkJWVN/view?usp=sharing"},
-  {name:"Flash_Games.zip",type:"PC",icon:"✨",url:"https://drive.google.com/file/d/1H_UTE-Vtt2TNHhS4Y1I6JLMj0wj_IrnN/view?usp=sharing"},
+  { name: "Super Mario 63", type: "Flash", icon: "🍄", file: "super_mario_63.swf" },
+  { name: "Strike Force Heroes", type: "Flash", icon: "💥", file: "strike-force-heroes-1.swf" },
+  { name: "Strike Force Heroes 2", type: "Flash", icon: "🔥", file: "strike-force-heroes-2.swf" },
+  { name: "Strike Force Heroes 3", type: "Flash", icon: "💥", file: "strike-force-heroes-3.swf" },
+  { name: "There is no game", type: "URL", icon: "🚫", url: "https://www.crazygames.com/embed/there-is-no-game" },
+  { name: "Need for Speed MW (2005)", type: "PC", icon: "🚗", url: "#" },
+  { name: "FIFA 09", type: "PC", icon: "⚽", url: "#" },
+  { name: "NES Games Collection", type: "PC", icon: "💽", url: "https://drive.google.com/file/d/1671Ws5CryHQomPNewtYp_oczbbgkJWVN/view?usp=sharing" },
+  { name: "Flash Games Archive", type: "PC", icon: "✨", url: "https://drive.google.com/file/d/1H_UTE-Vtt2TNHhS4Y1I6JLMj0wj_IrnN/view?usp=sharing" }
 ];
 
-window.RufflePlayer = window.RufflePlayer || {};
-
-function render(){
-  const q = (document.getElementById("s").value || "").toLowerCase();
+// Render Library
+function renderLibrary() {
+  const query = document.getElementById("searchInput").value.toLowerCase();
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
 
-  games
-    .filter(g => g.name.toLowerCase().includes(q))
-    .forEach(g => {
-     let action="";
+  const filteredGames = games.filter(g => g.name.toLowerCase().includes(query));
 
-     if(g.type==="Flash"){
-       action=`<a class="btn" href="#" onclick="play('${g.name.replace(/'/g,"\\'")}','${g.swf}');return false;">Play</a>`;
-     }
-     else if(g.type==="HTML" || g.type==="URL"){
-       action=`<a class="btn" href="#" onclick="playHTML('${g.name.replace(/'/g,"\\'")}','${g.url}');return false;">Play</a>`;
-     }
-     else{
-       action=`<a class="btn" href="${g.url}" target="_blank" rel="noopener noreferrer">Download</a>`;
-     }
-      
-      grid.innerHTML += `
-        <div class="card">
-          <div class="cover">${g.icon}</div>
-          <span class="badge">${g.type}</span>
-          <h3>${g.name}</h3>
-          ${action}
-        </div>
-      `;
-    });
+  filteredGames.forEach(g => {
+    let actionBtn = "";
+
+    if (g.type === "Flash") {
+      actionBtn = `<button class="btn" onclick="playFlash('${g.name.replace(/'/g, "\\'")}', '${g.file}')">▶ Play Flash</button>`;
+    } else if (g.type === "HTML" || g.type === "URL") {
+      actionBtn = `<button class="btn" onclick="playWebGame('${g.name.replace(/'/g, "\\'")}', '${g.url}')">▶ Play Web Game</button>`;
+    } else {
+      actionBtn = `<a class="btn" href="${g.url}" target="_blank" rel="noopener noreferrer">⬇ Download</a>`;
+    }
+    
+    grid.innerHTML += `
+      <div class="card">
+        <div class="cover">${g.icon}</div>
+        <span class="badge">${g.type}</span>
+        <h3>${g.name}</h3>
+        ${actionBtn}
+      </div>
+    `;
+  });
 }
 
-render();
+// Initial Render
+renderLibrary();
 
-function playCustomUrl() {
-  let url = document.getElementById("customUrl").value.trim();
-  if (!url) {
-    alert("Please enter a valid URL first.");
-    return;
-  }
-  
-  // FIX: Make sure the URL has http:// or https:// so the browser doesn't break
-  if (!/^https?:\/\//i.test(url)) {
-      url = "https://" + url;
-  }
-  
-  if (url.toLowerCase().endsWith(".swf")) {
-    play("Custom Flash Game", url);
-  } else {
-    playHTML("Custom Web Game", url);
-  }
-}
-
-function play(n,f){
+// Play Flash (.swf) via Ruffle
+function playFlash(title, fileUrl) {
   const overlay = document.getElementById("overlay");
-  const title = document.getElementById("t");
-  const game = document.getElementById("game");
+  const titleEl = document.getElementById("game-title");
+  const container = document.getElementById("game-container");
 
   overlay.classList.add("active");
-  title.textContent = n;
-  game.innerHTML = "";
+  titleEl.textContent = title;
+  container.innerHTML = ""; // Clear previous instance
 
-  const p = RufflePlayer.newest().createPlayer();
-  p.style.width = "100%";
-  p.style.height = "100%";
-  game.appendChild(p);
-  p.load({url:f});
+  const ruffle = window.RufflePlayer.newest();
+  const player = ruffle.createPlayer();
+  container.appendChild(player);
+  player.load({ url: fileUrl }).catch(err => {
+    container.innerHTML = `<p style="color:white; padding:20px;">Error loading game: Check if ${fileUrl} exists in your repository.</p>`;
+  });
 }
 
-function playHTML(n,url){
+// Play HTML/URL via Iframe
+function playWebGame(title, url) {
   const overlay = document.getElementById("overlay");
-  const title = document.getElementById("t");
-  const game = document.getElementById("game");
+  const titleEl = document.getElementById("game-title");
+  const container = document.getElementById("game-container");
 
   overlay.classList.add("active");
-  title.textContent = n;
-
-  // FIX: Added 'allow-same-origin' and 'allow-scripts' sandbox attributes which some games need
-  game.innerHTML = `
-    <iframe
-      src="${url}"
-      style="width:100%;height:100%;border:none;background:#000;"
-      allow="fullscreen; autoplay; gamepad; microphone; camera"
-      sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+  titleEl.textContent = title;
+  
+  container.innerHTML = `
+    <iframe 
+      src="${url}" 
+      allow="fullscreen; autoplay; gamepad; microphone" 
+      sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-downloads"
       allowfullscreen>
     </iframe>
   `;
 }
 
-function closeGame(){
-  document.getElementById("overlay").classList.remove("active");
-  document.getElementById("game").innerHTML = "";
+// Handle Custom URL input
+function playCustomUrl() {
+  let rawUrl = document.getElementById("customUrlInput").value.trim();
+  
+  if (!rawUrl) {
+    alert("Please enter a valid URL or file name.");
+    return;
+  }
+  
+  // Ensure absolute URLs have protocols so they don't break in GitHub Pages
+  if (rawUrl.includes('.') && !rawUrl.startsWith('http') && !rawUrl.endsWith('.swf')) {
+    rawUrl = "https://" + rawUrl;
+  }
+
+  if (rawUrl.toLowerCase().endsWith(".swf")) {
+    playFlash("Custom Flash Game", rawUrl);
+  } else {
+    playWebGame("Custom Web Game", rawUrl);
+  }
 }
 
-function toggleFullscreen(){
-  const game = document.getElementById("game");
-  if(!document.fullscreenElement){
-    game.requestFullscreen?.();
-  }else{
-    document.exitFullscreen?.();
+// Close Game Modal
+function closeGame() {
+  document.getElementById("overlay").classList.remove("active");
+  document.getElementById("game-container").innerHTML = ""; // Stops game audio/processing
+}
+
+// Toggle Fullscreen
+function toggleFullscreen() {
+  const container = document.getElementById("game-container");
+  if (!document.fullscreenElement) {
+    container.requestFullscreen?.() || container.webkitRequestFullscreen?.();
+  } else {
+    document.exitFullscreen?.() || document.webkitExitFullscreen?.();
   }
 }
 </script>
