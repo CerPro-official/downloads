@@ -99,11 +99,11 @@
 <div id="overlay">
   <div id="toolbar">
     <h2 id="game-title">Loading...</h2>
-    <div class="toolbar-actions">
-      <button class="toolBtn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
-      <button class="toolBtn" style="background: #ef4444;" onclick="closeGame()">✕ Close</button>
-    </div>
-  </div>
+  <div class="toolbar-actions">
+  <button class="toolBtn" onclick="lockCursor()">🎯 Lock Cursor</button>
+  <button class="toolBtn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+  <button class="toolBtn" style="background: #ef4444;" onclick="closeGame()">✕ Close</button>
+ </div>
   <div id="game-container"></div>
 </div>
 
@@ -183,6 +183,7 @@ function playFlash(title, fileUrl) {
   });
 }
 
+
 // Play HTML/URL via Iframe
 function playWebGame(title, url) {
   const overlay = document.getElementById("overlay");
@@ -192,11 +193,12 @@ function playWebGame(title, url) {
   overlay.classList.add("active");
   titleEl.textContent = title;
   
+  // Notice the updated sandbox attribute adding 'allow-pointer-lock'
   container.innerHTML = `
     <iframe 
       src="${url}" 
       allow="fullscreen; autoplay; gamepad; microphone" 
-      sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-downloads"
+      sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-downloads allow-pointer-lock"
       allowfullscreen>
     </iframe>
   `;
@@ -238,6 +240,23 @@ function toggleFullscreen() {
     document.exitFullscreen?.() || document.webkitExitFullscreen?.();
   }
 }
+
+ function lockCursor() {
+  const container = document.getElementById("game-container");
+  
+  // If playing a web game, target the iframe. Otherwise, target the container itself.
+  const targetElement = container.querySelector("iframe") || container;
+
+  if (targetElement.requestPointerLock) {
+    targetElement.requestPointerLock();
+  } else if (targetElement.webkitRequestPointerLock) {
+    // Fallback for older webkit browsers
+    targetElement.webkitRequestPointerLock();
+  } else {
+    alert("Your browser does not support cursor locking.");
+  }
+}
+ 
 </script>
 </body>
 </html>
